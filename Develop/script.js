@@ -4,29 +4,34 @@ console.log(today)
 $("#currentDay").text(today.format("dddd, MMM Do"));
 
 // Stores the current hour (as an integer) into a variable
-var currentHour = 12;
-
-// moment().hour();
+var currentHour = moment().hour();
 console.log(currentHour)
-
 
 // Changes <textarea> color based on the time of day
 function changeHourColor () {
   $(".time-block").each(function () {
     var plannerHour = $(this).attr("id");
-    if (plannerHour < currentHour) {
-      $(this).children("textarea").addClass("past");
-    } else if (plannerHour == currentHour) {
+    if (plannerHour == currentHour) {
       $(this).children("textarea").addClass("present");
+    } else if (plannerHour < currentHour) {
+      $(this).children("textarea").addClass("past");
     } else {
       $(this).children("textarea").addClass("future");
     }
   })
 }
 
+// Click event on save button that saves text to localStorage
+$(".saveBtn").on("click", function () {
+  var key = $(this).parent().attr("id");
+  var value = $(this).parent().find(".description").val();
+  localStorage.setItem(key, value)
+});
+
 // Stores HTML element classed "time-block" as a variable
 var timeBlock = $(".time-block")
 
+// Retrieves stored data when the page is refreshed
 for (let i = 0; i < timeBlock.length; i++) {
   var timeBlockIndexed = timeBlock[i]
   var timeId = $(timeBlockIndexed).attr("id");
@@ -36,19 +41,5 @@ for (let i = 0; i < timeBlock.length; i++) {
   }
 };
 
-// When the save button is clicked, save the text to local storage
-
-$(".saveBtn").on("click", function () {
-  var key = $(this).parent().attr("id");
-  var value = $(this).parent().find(".description").val();
-  localStorage.setItem(key, value)
-});
-  
+// Calls the changeHourColor() function into play
 changeHourColor();
-
- 
-
-// function --> when button is clicked, save textarea value to local storage
-
-// $( "#button-container button" ).on( "click", function( event ) {
-// });
